@@ -1,5 +1,10 @@
 import { templatePaths } from "./templates.js";
 
+declare global {
+  type CharacterClass = keyof typeof characterClasses;
+  type ItemType = keyof typeof itemTypes;
+}
+
 /**
  * Global Constants
  */
@@ -11,6 +16,7 @@ const characterClasses = {
 
 const itemTypes = {
   skill: "TYPES.Item.skill",
+  weapon: "TYPES.Item.weapon",
 } as const;
 
 const stats = {

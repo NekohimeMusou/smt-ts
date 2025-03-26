@@ -33,7 +33,8 @@
       "human": { "htmlFields": ["notes"] }
     },
     "Item": {
-      "skill": { "htmlFields": ["description"] }
+      "skill": { "htmlFields": ["description"] },
+      "weapon": { "htmlFields": ["description"] }
     }
   },
 

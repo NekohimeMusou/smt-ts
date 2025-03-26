@@ -1,10 +1,19 @@
 import { SMT } from "./config/config.js";
 import { ACTORMODELS } from "./data-models/actor/actor-data-models.js";
 import { ITEMMODELS } from "./data-models/item/item-data-models.js";
+import { SmtActor } from "./documents/actor/actor.js";
+import { SmtItem } from "./documents/item/item.js";
 
 declare global {
   interface CONFIG {
     SMT: typeof SMT;
+  }
+
+  interface Game {
+    smt: {
+      SmtActor: typeof SmtActor;
+      SmtItem: typeof SmtItem;
+    };
   }
 }
 

@@ -1,3 +1,5 @@
+import { SmtActor } from "../../../documents/actor/actor.js";
+
 const fields = foundry.data.fields;
 
 const stats = new fields.SchemaField({
@@ -88,18 +90,39 @@ const bioData = {
 };
 
 const schema = {
-  statSchema: stats,
+  stats,
   ...resources,
-  tnSchema: tn,
+  tn,
   power,
   resist,
   ...bioData,
+  xp: new fields.NumberField({ integer: true, min: 0, initial: 0 }),
+  macca: new fields.NumberField({ integer: true, min: 0 }),
+  isNPC: new fields.BooleanField(),
+  levelOverride: new fields.NumberField({ integer: true, min: 1 }),
 };
 
-export abstract class SmtBaseActorData extends foundry.abstract.TypeDataModel<
-  typeof schema,
-  Actor
-> {
+export abstract class SmtBaseActorData<
+  T extends SmtActor<CharacterClass>,
+> extends foundry.abstract.TypeDataModel<typeof schema, T> {
+  get lv() {
+    if (this.isNPC) {
+      return this.levelOverride;
+    }
+
+    return this.#pcLevel;
+  }
+
+  get #pcLevel() {
+    const levelTable = CONFIG.SMT.levelTables[this.parent.type];
+    const xp = this.xp ?? 0;
+
+    return Math.max(
+      levelTable.findLastIndex((tableXp) => tableXp < xp + 1),
+      1,
+    );
+  }
+
   static override defineSchema() {
     return schema;
   }

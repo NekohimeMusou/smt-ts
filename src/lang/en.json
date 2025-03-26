@@ -1,7 +1,8 @@
 {
   "TYPES": {
     "Item": {
-      "skill": "Skill"
+      "skill": "Skill",
+      "weapon": "Weapon"
     },
     "Actor": {
       "fiend": "Fiend",
