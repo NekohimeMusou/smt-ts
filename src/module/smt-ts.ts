@@ -19,14 +19,6 @@ declare global {
   }
 }
 
-export function isCharacterClass(cls: string): cls is CharacterClass {
-  return cls in CONFIG.SMT.characterClasses;
-}
-
-export function isItemType(cls: string): cls is ItemType {
-  return cls in CONFIG.SMT.itemTypes;
-}
-
 export function getGame(): ReadyGame {
   if (game instanceof Game && game.ready) {
     return game;
