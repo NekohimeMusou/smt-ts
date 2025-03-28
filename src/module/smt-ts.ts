@@ -1,7 +1,12 @@
 import { SMT } from "./config/config.js";
 import { ACTORMODELS } from "./data-models/actor/actor-data-models.js";
 import { ITEMMODELS } from "./data-models/item/item-data-models.js";
-import { SmtActor } from "./documents/actor/actor.js";
+import {
+  DemonActor,
+  FiendActor,
+  HumanActor,
+  SmtActor,
+} from "./documents/actor/actor.js";
 import { SmtItem } from "./documents/item/item.js";
 import { SmtActorSheet } from "./sheets/actor/actor-sheet.js";
 import { SmtItemSheet } from "./sheets/item/item-sheet.js";
@@ -25,6 +30,22 @@ export function getGame(): ReadyGame {
   }
 
   throw new Error("game object not initialized yet!");
+}
+
+export function isFiend(actor: Actor): actor is FiendActor {
+  return actor.type === "fiend";
+}
+
+export function isDemon(actor: Actor): actor is DemonActor {
+  return actor.type === "demon";
+}
+
+export function isHuman(actor: Actor): actor is HumanActor {
+  return actor.type === "human";
+}
+
+export function isSmtActor(actor: Actor) {
+  return isFiend(actor) || isDemon(actor) || isHuman(actor);
 }
 
 Hooks.once("init", async () => {
