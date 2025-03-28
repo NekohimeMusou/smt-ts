@@ -1,5 +1,3 @@
-import { SmtActor } from "../../../documents/actor/actor.js";
-
 const fields = foundry.data.fields;
 
 const stats = new fields.SchemaField({
@@ -102,28 +100,68 @@ const schema = {
   levelOverride: new fields.NumberField({ integer: true, min: 1 }),
 };
 
+function isCharacterClass(cls: string): cls is CharacterClass {
+  return cls in CONFIG.SMT.characterClasses;
+}
+
 export abstract class SmtBaseActorData<
-  T extends SmtActor<CharacterClass>,
+  T extends Actor.Implementation,
 > extends foundry.abstract.TypeDataModel<typeof schema, T> {
-  get lv() {
-    if (this.isNPC) {
-      return this.levelOverride;
+  get pcLevel() {
+    const actor = this.parent;
+    if (isCharacterClass(actor.type)) {
+      const levelTable = CONFIG.SMT.levelTables[actor.type];
+
+      const xp = this.xp ?? 0;
+
+      return Math.max(
+        levelTable.findLastIndex((tableXp) => tableXp < xp + 1),
+        1,
+      );
     }
 
-    return this.#pcLevel;
+    throw new Error("Invalid character class.");
   }
 
-  get #pcLevel() {
-    const levelTable = CONFIG.SMT.levelTables[this.parent.type];
-    const xp = this.xp ?? 0;
+  // get #pcLevel() {
+  //   const levelTable = CONFIG.SMT.levelTables[this.parent.type];
+  //   const xp = this.xp ?? 0;
 
-    return Math.max(
-      levelTable.findLastIndex((tableXp) => tableXp < xp + 1),
-      1,
-    );
-  }
+  //   return Math.max(
+  //     levelTable.findLastIndex((tableXp) => tableXp < xp + 1),
+  //     1,
+  //   );
+  // }
+
+  // get #pcLevel() {
+  //   const parent = this.parent;
+  //   const what = parent.type;
+  //   const parentType = parent.type;
+
+  //   if (!isSmtActor(parent)) {
+  //     throw new Error("Invalid actor type");
+  //   }
+
+  //   const actor = parent;
+  // }
 
   static override defineSchema() {
     return schema;
   }
 }
+
+// function isSmtActor(actor: Actor) {
+//   return (isFiend(actor) || isDemon(actor) || isHuman(actor));
+// }
+
+// function isFiend(actor: Actor): actor is SmtActor<"fiend"> {
+//   return actor.type === "fiend";
+// }
+
+// function isDemon(actor: Actor): actor is SmtActor<"demon"> {
+//   return actor.type === "demon";
+// }
+
+// function isHuman(actor: Actor): actor is SmtActor<"human"> {
+//   return actor.type === "human";
+// }
