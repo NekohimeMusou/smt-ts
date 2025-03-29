@@ -27,11 +27,6 @@
   ],
 
   "documentTypes": {
-    "Actor": {
-      "fiend": { "htmlFields": ["notes"] },
-      "demon": { "htmlFields": ["notes"] },
-      "human": { "htmlFields": ["notes"] }
-    },
     "Item": {
       "skill": { "htmlFields": ["description"] },
       "weapon": { "htmlFields": ["description"] }
