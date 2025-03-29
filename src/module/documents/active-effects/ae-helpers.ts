@@ -12,5 +12,4 @@
 //   const a = $(event.currentTarget);
 
 //   const test = owner.type;
-//   const playtime = owner.
 // }
